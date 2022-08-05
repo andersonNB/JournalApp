@@ -1,0 +1,18 @@
+.transitionProduct {
+	/* position: relative; */
+	border-radius: 4px;
+	background-size: cover;
+	background-repeat: no-repeat;
+	height: 70%;
+	width: 100%;
+}
+.Animate {
+	position: absolute;
+	opacity: 100;
+}
+.transitionProduct:hover {
+	transition: 300ms ease;
+
+	overflow: hidden;
+	filter: blur(5px);
+}
