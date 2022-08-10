@@ -1,4 +1,5 @@
-import {useDispatch} from "react-redux";
+import {useMemo} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import {Link as RouterLink} from "react-router-dom";
 import {Button, Grid, Link, TextField, Typography} from "@mui/material";
 import {Google} from "@mui/icons-material";
@@ -8,12 +9,16 @@ import {chekingAuthentication, startGoogleSingIn} from "../../store/auth";
 import imgPath from "../../assets/murky.png";
 
 const LoginPage = () => {
+	const {status} = useSelector((state) => state.authRedux);
 	const dispatch = useDispatch();
 
 	const {email, password, onInputChange, onResetForm} = useForm({
 		email: "andersonAugusto@gmail.com",
 		password: "hacker",
 	});
+
+	//Memorizamos el resultado del status
+	const isAuthenticating = useMemo(() => status === "Checking", [status]);
 
 	const onSubmit = (event) => {
 		event.preventDefault();
@@ -63,12 +68,22 @@ const LoginPage = () => {
 					{/* Grid con la propiedad container, crea una caja */}
 					<Grid container spacing={2} sx={{mb: 2, mt: 1}}>
 						<Grid item xs={12} sm={6}>
-							<Button variant="contained" fullWidth type="submit">
+							<Button
+								disabled={isAuthenticating}
+								variant="contained"
+								fullWidth
+								type="submit"
+							>
 								Login
 							</Button>
 						</Grid>
 						<Grid item xs={12} sm={6}>
-							<Button variant="contained" fullWidth onClick={onGoogleSignIn}>
+							<Button
+								disabled={isAuthenticating}
+								variant="contained"
+								fullWidth
+								onClick={onGoogleSignIn}
+							>
 								<Google />
 								<Typography sx={{ml: 1}}>Google</Typography>
 							</Button>
