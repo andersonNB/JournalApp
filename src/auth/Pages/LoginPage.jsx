@@ -1,20 +1,24 @@
 import {useMemo} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Link as RouterLink} from "react-router-dom";
-import {Button, Grid, Link, TextField, Typography} from "@mui/material";
+import {Alert, Button, Grid, Link, TextField, Typography} from "@mui/material";
 import {Google} from "@mui/icons-material";
 import AuthLayout from "../layout/AuthLayout";
 import {useForm} from "../../hooks";
-import {chekingAuthentication, startGoogleSingIn} from "../../store/auth";
+import {
+	chekingAuthentication,
+	startGoogleSingIn,
+	startLoginWithEmailPassword,
+} from "../../store/auth";
 import imgPath from "../../assets/murky.png";
 
 const LoginPage = () => {
-	const {status} = useSelector((state) => state.authRedux);
+	const {status, errorMessage} = useSelector((state) => state.authRedux);
 	const dispatch = useDispatch();
 
 	const {email, password, onInputChange, onResetForm} = useForm({
-		email: "andersonAugusto@gmail.com",
-		password: "hacker",
+		email: "",
+		password: "",
 	});
 
 	//Memorizamos el resultado del status
@@ -24,7 +28,9 @@ const LoginPage = () => {
 		event.preventDefault();
 		console.log(email, " ", password);
 
-		dispatch(chekingAuthentication(email, password));
+		// dispatch(chekingAuthentication(email, password));
+
+		dispatch(startLoginWithEmailPassword(email, password));
 
 		onResetForm();
 	};
@@ -63,6 +69,12 @@ const LoginPage = () => {
 							value={password}
 							onChange={onInputChange}
 						/>
+					</Grid>
+
+					<Grid container sx={{mt: 1}}>
+						<Grid item xs={12} display={!!errorMessage ? "" : "none"}>
+							<Alert severity="error">{errorMessage}</Alert>
+						</Grid>
 					</Grid>
 
 					{/* Grid con la propiedad container, crea una caja */}

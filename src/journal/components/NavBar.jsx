@@ -2,6 +2,10 @@ import {LoginOutlined, MenuOutlined} from "@mui/icons-material";
 import {AppBar, Grid, IconButton, Toolbar, Typography} from "@mui/material";
 
 const NavBar = ({drawerWidth = 240}) => {
+	const onLogout = () => {
+		console.log("Logout");
+	};
+
 	return (
 		<AppBar
 			position="fixed"
@@ -29,7 +33,7 @@ const NavBar = ({drawerWidth = 240}) => {
 					<Typography variant="h6" noWrap component="div">
 						JournalApp
 					</Typography>
-					<IconButton color="error">
+					<IconButton color="error" onClick={onLogout}>
 						<LoginOutlined />
 					</IconButton>
 				</Grid>

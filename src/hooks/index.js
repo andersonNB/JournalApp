@@ -1,3 +1,4 @@
 import useForm from './useForm'
+import useCheckAuth from "./useCheckAuth"
 
-export { useForm }
+export { useForm, useCheckAuth }

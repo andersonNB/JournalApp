@@ -14,11 +14,11 @@ const JournalPage = () => {
 			{/* Cuando no hay nada seleccionado 
 			mostrar Algo , ej: NothingSelected
 			 */}
-			{/* <NothingSelectedView /> */}
+			<NothingSelectedView />
 			{/* Caso contrario
 			   NoteView
 			  */}
-			<NoteView />
+			{/* <NoteView /> */}
 			<IconButton
 				size="large"
 				sx={{

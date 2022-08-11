@@ -1,8 +1,10 @@
-import {useState} from "react";
+import {useMemo, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import {Link as RouterLink} from "react-router-dom";
-import {Button, Grid, Link, TextField, Typography} from "@mui/material";
+import {Alert, Button, Grid, Link, TextField, Typography} from "@mui/material";
 import AuthLayout from "../layout/AuthLayout";
 import {useForm} from "../../hooks";
+import {startCreatingUserWithEmailPassword} from "../../store/auth";
 
 const formData = {
 	displayName: "",
@@ -20,9 +22,22 @@ const formValidations = {
 };
 
 const RegisterPage = () => {
+	const dispatch = useDispatch();
+
 	//Creamos un state para evitar que salgan los mensajes de error
 	// la primera vez que la persona ingresa a la página
 	const [formSubmitted, setformSubmitted] = useState(false);
+
+	//useSelector para tomar lo que necesitemos de nuestro
+	//state
+	const {status, errorMessage} = useSelector((state) => state.authRedux);
+
+	//useMemo para memorizar el valor del status y no mandar a renderizar
+	//el component cada que cambie el estado
+	const isCheckingAuthentication = useMemo(
+		() => status === "Checking",
+		[status]
+	);
 
 	//Le podemos enviar las validaciones a nuestro useForm
 	// como segundo argumento
@@ -47,7 +62,9 @@ const RegisterPage = () => {
 		//Si el formulario no es valido, no retornamos nada
 		if (!isFormValid) return;
 
-		console.log("formState ", formState);
+		console.log("formState tiene toda la data", formState);
+
+		dispatch(startCreatingUserWithEmailPassword(formState));
 	};
 
 	return (
@@ -100,8 +117,16 @@ const RegisterPage = () => {
 
 					{/* Grid con la propiedad container, crea una caja */}
 					<Grid container spacing={2} sx={{mb: 2, mt: 1}}>
+						<Grid item xs={12} display={!!errorMessage ? "" : "none"}>
+							<Alert severity="error">{errorMessage}</Alert>
+						</Grid>
 						<Grid item xs={12}>
-							<Button variant="contained" fullWidth type="submit">
+							<Button
+								disabled={isCheckingAuthentication}
+								variant="contained"
+								fullWidth
+								type="submit"
+							>
 								Crear cuenta
 							</Button>
 						</Grid>
