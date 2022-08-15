@@ -1,3 +1,4 @@
+import {useSelector} from "react-redux";
 import {TurnedInNot} from "@mui/icons-material";
 import {
 	Box,
@@ -14,6 +15,8 @@ import {
 } from "@mui/material";
 
 const SideBar = ({drawerWidth = 240}) => {
+	const {displayName} = useSelector((state) => state.authRedux);
+
 	return (
 		<Box component="nav" sx={{width: {sm: drawerWidth}, flexShrink: {sm: 0}}}>
 			<Drawer
@@ -26,7 +29,7 @@ const SideBar = ({drawerWidth = 240}) => {
 			>
 				<Toolbar>
 					<Typography variant="h6" noWrap component="div">
-						Anderson Navarro
+						{displayName ? displayName : "What are you doing here? o.O"}
 					</Typography>
 				</Toolbar>
 				<Divider />

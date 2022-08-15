@@ -72,7 +72,10 @@ const RegisterPage = () => {
 		// sx -> hace referencia a estilos css
 		<AuthLayout title="Crear cuenta">
 			{/* <h1>FormValid: {isFormValid ? "Valido" : "Incorrecto"} </h1> */}
-			<form onSubmit={onSubmit}>
+			<form
+				onSubmit={onSubmit}
+				className="animate__animated animate__fadeIn animate__faster"
+			>
 				<Grid container>
 					{/* Grid con la propiedad item, es un hijo del container */}
 					<Grid item xs={12} sx={{mt: 2}}>

@@ -93,3 +93,12 @@ export const loginWithEmailPassword = async (emailLogin, password) => {
     }
 
 }
+
+//Llamamos la función de logout de firebase
+// recordar que todos los providers son asincronos o en su mayoria
+export const logoutFirebase = async () => {
+
+
+    return await FirebaseAuth.signOut()
+
+}

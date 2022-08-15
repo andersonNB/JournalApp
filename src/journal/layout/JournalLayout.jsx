@@ -5,7 +5,10 @@ const drawerWidth = 240; //-> esto seria nuestra barra lateral
 //Los Layout en este caso, esperan un children
 const JournalLayout = ({children}) => {
 	return (
-		<Box sx={{display: "flex", backgroundColor: "#FFF9CA"}}>
+		<Box
+			sx={{display: "flex", backgroundColor: "#FFF9CA"}}
+			className="animate__animated animate__fadeIn animate__faster"
+		>
 			JournalLayout
 			{/* Navbar drawerWidth */}
 			<NavBar drawerWidth={drawerWidth} />
