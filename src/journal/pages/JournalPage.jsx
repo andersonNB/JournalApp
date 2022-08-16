@@ -1,3 +1,4 @@
+import {useDispatch} from "react-redux";
 import {IconButton, Typography, Grid} from "@mui/material";
 import {AddOutlined, Reddit} from "@mui/icons-material";
 import JournalLayout from "../layout/JournalLayout";
@@ -5,8 +6,17 @@ import {NothingSelectedView, NoteView} from "../views";
 import transition from "../../assets/hover.webp";
 import videoLich from "../../assets/video/Tile_Anim_WoW_ClassicLich.mp4";
 import "../styles/JournalPage.css";
+import {startNewNote} from "../../store/journal";
 
 const JournalPage = () => {
+	const dispatch = useDispatch();
+
+	const onClickNewNote = () => {
+		//Nota: si quiero ejecutar una acción de nuestro thunks
+		// o reducer se ocupa utilizar el dispatch
+		dispatch(startNewNote());
+	};
+
 	return (
 		<JournalLayout>
 			<Typography variant="h6">JournalPage</Typography>
@@ -32,6 +42,7 @@ const JournalPage = () => {
 					left: 850,
 					bottom: 10,
 				}}
+				onClick={onClickNewNote}
 			>
 				<AddOutlined sx={{fontSize: 30}} />
 			</IconButton>
