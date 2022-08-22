@@ -12,14 +12,18 @@ import {
 } from "../../store/auth";
 import imgPath from "../../assets/murky.png";
 
+const initialStateFormSinReRenders = {
+	email: "",
+	password: "",
+};
+
 const LoginPage = () => {
 	const {status, errorMessage} = useSelector((state) => state.authRedux);
 	const dispatch = useDispatch();
 
-	const {email, password, onInputChange, onResetForm} = useForm({
-		email: "",
-		password: "",
-	});
+	const {email, password, onInputChange, onResetForm} = useForm(
+		initialStateFormSinReRenders
+	);
 
 	//Memorizamos el resultado del status
 	const isAuthenticating = useMemo(() => status === "Checking", [status]);

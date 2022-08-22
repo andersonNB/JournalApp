@@ -14,6 +14,12 @@ const useForm = (initialForm = {}, formValidations = {}) => {
         createValidators();
     }, [formState])
 
+    //Puede ocurrir el caso de que si activa este efecto pero llega a existir un estado inicial vacio
+    //este activara un elevado número de veces la re renderización
+    useEffect(() => {
+        setFormState(initialForm)
+    }, [initialForm])
+
     const isFormValid = useMemo(() => {
 
         for (const formValue of Object.keys(formValidation)) {

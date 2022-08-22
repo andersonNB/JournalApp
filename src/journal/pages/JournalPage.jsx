@@ -1,4 +1,4 @@
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {IconButton, Typography, Grid} from "@mui/material";
 import {AddOutlined, Reddit} from "@mui/icons-material";
 import JournalLayout from "../layout/JournalLayout";
@@ -10,6 +10,10 @@ import {startNewNote} from "../../store/journal";
 
 const JournalPage = () => {
 	const dispatch = useDispatch();
+
+	const {isSaving, active} = useSelector((state) => {
+		return state.journal;
+	});
 
 	const onClickNewNote = () => {
 		//Nota: si quiero ejecutar una acción de nuestro thunks
@@ -23,14 +27,14 @@ const JournalPage = () => {
 			<Reddit />
 			{/* Cuando no hay nada seleccionado 
 			mostrar Algo , ej: NothingSelected
-			 */}
-			<NothingSelectedView />
-			{/* Caso contrario
+			 {/* Caso contrario
 			   NoteView
 			  */}
-			{/* <NoteView /> */}
+			{!!active ? <NoteView /> : <NothingSelectedView />}
+
 			<IconButton
 				size="large"
+				disabled={isSaving}
 				sx={{
 					color: "white",
 					backgroundColor: "error.main",
@@ -46,7 +50,6 @@ const JournalPage = () => {
 			>
 				<AddOutlined sx={{fontSize: 30}} />
 			</IconButton>
-
 			<Grid sx={{backgroundColor: "#2BF5FF"}} container>
 				<Grid item xs={6} sx={{backgroundColor: "#2aff32"}}>
 					<img src={transition} alt="Link king" className="transitionProduct" />
