@@ -1,7 +1,7 @@
 import { collection, doc, setDoc } from 'firebase/firestore/lite'
 import { FirebaseDB } from "../../firebase/config";
 import { loadNotes } from "../../helpers";
-import { addNewEmptyNote, setActiveNote, savingNewNote, setNotes } from "./journalSlice";
+import { addNewEmptyNote, setActiveNote, savingNewNote, setNotes, setSaving, updateNote } from "./journalSlice";
 //start para empezar el proceso, es decir este es el inicio
 export const startNewNote = () => {
 
@@ -60,5 +60,35 @@ export const startLoadingNotes = () => {
         const notesRedux = await loadNotes(uid)
 
         dispatch(setNotes(notesRedux))
+    }
+}
+
+export const startSaveNote = () => {
+    return async (dispatch, getState) => {
+
+
+        dispatch(setSaving())
+
+        //Nuestro uid del usuario autenticado
+        const { uid } = getState().authRedux;
+
+        const { active: note } = getState().journal
+
+        //Debemos remover el id de la nota activa 
+        //antes ya que firestone nos lo crea
+        const noteToFireStore = { ...note };
+        delete noteToFireStore.id;
+
+        console.log(noteToFireStore)
+
+        //Ahora para guardar en firestone vamos a sacar
+        // la referencia al doc donde queremos guardar
+        const docRef = doc(FirebaseDB, `${uid}/journal/notes/${note.id}`)
+        await setDoc(docRef, noteToFireStore, { merge: true })
+
+        //En este punto actualizamos los cambios
+        //que se hagan en local y a su vez se puedan
+        //visualizar
+        dispatch(updateNote(note));
     }
 }
