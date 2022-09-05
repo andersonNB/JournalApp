@@ -29,6 +29,7 @@ export const journalSlice = createSlice({
         //Mostrar que nota esta activa
         setActiveNote: (state, action) => {
             state.active = action.payload
+            state.messageSaved = "";
         },
         //Cargar las notas
         setNotes: (state, action) => {
@@ -36,7 +37,8 @@ export const journalSlice = createSlice({
         },
         //Hacemos esta acción cuando grabamos las notas
         setSaving: (state) => {
-
+            state.isSaving = true;
+            state.messageSaved = "";
         },
         //Actualizar una nota
         updateNote: (state, action) => {
@@ -49,6 +51,8 @@ export const journalSlice = createSlice({
                 return note
             })
 
+            //Cuando la nota se actualice
+            state.messageSaved = `${action.payload.title}, actualizada correctamente`
         },
         //Eliminamos una nota por id
         deleteNodeById: (state, action) => {
