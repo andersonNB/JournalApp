@@ -1,4 +1,5 @@
 import { loginWithEmailPassword, logoutFirebase, registerUserWithEmailPassword, singInWithGoogle } from "../../firebase/providers"
+import { clearNotesLogout } from "../journal"
 import { checkingCredentials, logout, login } from './'
 
 export const chekingAuthentication = (email, password) => {
@@ -75,6 +76,7 @@ export const startLogout = () => {
 
         try {
             await logoutFirebase(logout())
+            dispatch(clearNotesLogout())
         } catch (error) {
             console.log("Error en startLogout", error)
         }

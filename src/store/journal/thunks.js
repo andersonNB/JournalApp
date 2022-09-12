@@ -1,7 +1,7 @@
 import { collection, doc, setDoc } from 'firebase/firestore/lite'
 import { FirebaseDB } from "../../firebase/config";
-import { loadNotes } from "../../helpers";
-import { addNewEmptyNote, setActiveNote, savingNewNote, setNotes, setSaving, updateNote } from "./journalSlice";
+import { fileUpload, loadNotes } from "../../helpers";
+import { addNewEmptyNote, setActiveNote, savingNewNote, setNotes, setSaving, updateNote, setPhotosToActiveNote } from "./journalSlice";
 //start para empezar el proceso, es decir este es el inicio
 export const startNewNote = () => {
 
@@ -90,5 +90,31 @@ export const startSaveNote = () => {
         //que se hagan en local y a su vez se puedan
         //visualizar
         dispatch(updateNote(note));
+    }
+}
+
+export const startUploadingFiles = (files = []) => {
+    return async (dispatch, getState) => {
+        dispatch(setSaving());
+
+        console.log("files en el thunks: ", files)
+
+
+        //Vamos a disparar todas las peticiones simultaneamente 
+        // en vez de una por una (for,foreach)
+        //rellenamos el arreglo
+        const fileUploadPromises = [];
+        for (const file of files) {
+            fileUploadPromises.push(fileUpload(file))
+        }
+
+        //aquí ya tenemos el arreglo de imagenes y con
+        // el promise.all hacemos el llamado de manera simultanea
+        // y no iterativa
+        const photosUrls = await Promise.all(fileUploadPromises);
+        console.log("photosUrls: ", photosUrls)
+
+        dispatch(setPhotosToActiveNote(photosUrls))
+
     }
 }

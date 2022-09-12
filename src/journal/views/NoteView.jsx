@@ -1,14 +1,18 @@
-import {useMemo, useEffect} from "react";
+import {useMemo, useEffect, useRef} from "react";
 import {useSelector, useDispatch} from "react-redux";
 //Paquetes de terceros---
-import {SaveOutlined} from "@mui/icons-material";
-import {Grid, Typography, Button, TextField} from "@mui/material";
+import {SaveOutlined, UploadOutlined} from "@mui/icons-material";
+import {Grid, Typography, Button, TextField, IconButton} from "@mui/material";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.css";
 //---
 import {ImageGallery} from "../components";
 import {useForm} from "../../hooks";
-import {setActiveNote, startSaveNote} from "../../store/journal";
+import {
+	setActiveNote,
+	startSaveNote,
+	startUploadingFiles,
+} from "../../store/journal";
 
 const NoteView = () => {
 	const dispatch = useDispatch();
@@ -26,6 +30,9 @@ const NoteView = () => {
 		return newDate.toUTCString();
 	}, [date]);
 
+	//Obtenemos la referencia al input para simular el click
+	const fileInputRef = useRef();
+
 	useEffect(() => {
 		dispatch(setActiveNote(formState));
 	}, [formState]);
@@ -42,6 +49,16 @@ const NoteView = () => {
 		dispatch(startSaveNote());
 	};
 
+	//Aquí capturamos los archivos que se van a subir
+	const onFileInputChange = ({target}) => {
+		console.log("target.files: ", target.files);
+		console.log("fileInputRef: ", fileInputRef);
+		//Si es igual a 0 quiere decir que no subio un archivo
+		if (target.files === 0) return;
+
+		dispatch(startUploadingFiles(target.files));
+	};
+
 	return (
 		<Grid
 			container
@@ -56,6 +73,20 @@ const NoteView = () => {
 				</Typography>
 			</Grid>
 			<Grid item>
+				<input
+					type="file"
+					multiple
+					ref={fileInputRef}
+					onChange={onFileInputChange}
+					style={{display: "none", backgroundColor: "salmon"}}
+				/>
+				<IconButton
+					color="primary"
+					disabled={isSaving}
+					onClick={() => fileInputRef.current.click()}
+				>
+					<UploadOutlined />
+				</IconButton>
 				<Button
 					disabled={isSaving}
 					onClick={onSaveNote}
@@ -94,7 +125,7 @@ const NoteView = () => {
 				/>
 			</Grid>
 			{/* Galería de imagenes */}
-			<ImageGallery />
+			<ImageGallery images={activeNote.imageUrls} />
 		</Grid>
 	);
 };

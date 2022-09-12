@@ -15,7 +15,7 @@ const useForm = (initialForm = {}, formValidations = {}) => {
     }, [formState])
 
     //Puede ocurrir el caso de que si activa este efecto pero llega a existir un estado inicial vacio
-    //este activara un elevado número de veces la re renderización
+    //este activara un elevado número de veces la re-renderización
     useEffect(() => {
         setFormState(initialForm)
     }, [initialForm])

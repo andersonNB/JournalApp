@@ -54,6 +54,23 @@ export const journalSlice = createSlice({
             //Cuando la nota se actualice
             state.messageSaved = `${action.payload.title}, actualizada correctamente`
         },
+
+        setPhotosToActiveNote: (state, action) => {
+            // hacemos copia a las imagenes anteriores ...state.active.imageUrls
+            // y de las nuevas con ...action.payload
+            state.active.imageUrls = [...state.active.imageUrls, ...action.payload]
+
+            //terminamos la carga volvemos el isSaving en false
+            state.isSaving = false
+        },
+
+        clearNotesLogout: (state) => {
+            state.isSaving = false,
+                state.messageSaved = "";
+            state.notes = []
+            state.active = null
+        },
+
         //Eliminamos una nota por id
         deleteNodeById: (state, action) => {
 
@@ -62,10 +79,12 @@ export const journalSlice = createSlice({
 });
 export const {
     addNewEmptyNote,
+    clearNotesLogout,
     deleteNodeById,
     savingNewNote,
     setActiveNote,
     setNotes,
+    setPhotosToActiveNote,
     setSaving,
     updateNote,
 } = journalSlice.actions;
