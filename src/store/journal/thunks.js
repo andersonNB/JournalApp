@@ -1,7 +1,7 @@
-import { collection, doc, setDoc } from 'firebase/firestore/lite'
+import { collection, deleteDoc, doc, setDoc } from 'firebase/firestore/lite'
 import { FirebaseDB } from "../../firebase/config";
 import { fileUpload, loadNotes } from "../../helpers";
-import { addNewEmptyNote, setActiveNote, savingNewNote, setNotes, setSaving, updateNote, setPhotosToActiveNote } from "./journalSlice";
+import { addNewEmptyNote, setActiveNote, savingNewNote, setNotes, setSaving, updateNote, setPhotosToActiveNote, deleteNoteById } from "./journalSlice";
 //start para empezar el proceso, es decir este es el inicio
 export const startNewNote = () => {
 
@@ -97,7 +97,7 @@ export const startUploadingFiles = (files = []) => {
     return async (dispatch, getState) => {
         dispatch(setSaving());
 
-        console.log("files en el thunks: ", files)
+        // console.log("files en el thunks: ", files)
 
 
         //Vamos a disparar todas las peticiones simultaneamente 
@@ -112,9 +112,29 @@ export const startUploadingFiles = (files = []) => {
         // el promise.all hacemos el llamado de manera simultanea
         // y no iterativa
         const photosUrls = await Promise.all(fileUploadPromises);
-        console.log("photosUrls: ", photosUrls)
+        // console.log("photosUrls: ", photosUrls)
 
         dispatch(setPhotosToActiveNote(photosUrls))
 
+    }
+}
+
+export const startDeletingNote = () => {
+    return async (dispatch, getState) => {
+        // el id del usuario en sesión
+        const { uid } = getState().authRedux;
+
+        //Y la nota activa o seleccionada
+        const { active: note } = getState().journal
+
+        console.log("uid: ", uid, "active: ", note)
+
+        //creamos la referencia a firebase
+        const docRef = doc(FirebaseDB, `${uid}/journal/notes/${note.id}`)
+
+        const resp = await deleteDoc(docRef)
+        console.log("eliminación resp: ", resp)
+
+        dispatch(deleteNoteById(note.id))
     }
 }

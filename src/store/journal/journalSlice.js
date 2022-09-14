@@ -63,24 +63,33 @@ export const journalSlice = createSlice({
             //terminamos la carga volvemos el isSaving en false
             state.isSaving = false
         },
-
+        // Limpiar las notas cuando cerramos sesión
         clearNotesLogout: (state) => {
-            state.isSaving = false,
-                state.messageSaved = "";
+            state.isSaving = false;
+            state.messageSaved = "";
             state.notes = []
             state.active = null
         },
 
         //Eliminamos una nota por id
-        deleteNodeById: (state, action) => {
+        deleteNoteById: (state, action) => {
+            console.log("action: ", action)
+            state.active = null
+            state.notes = state.notes.filter(noteDelete => noteDelete.id !== action.payload)
 
+            //sin redux tolking
+            // return {
+            //     ...state,
+            //     active:null,
+            //     notes:state.notes.filter(noteDelete => noteDelete.id !== action.payload)
+            // }
         },
     }
 });
 export const {
     addNewEmptyNote,
     clearNotesLogout,
-    deleteNodeById,
+    deleteNoteById,
     savingNewNote,
     setActiveNote,
     setNotes,
